@@ -1,0 +1,333 @@
+# Place this file as .plugins in your home directory and source it at the end of your .zshrc file!
+# Make sure you have Oh-My-ZSH installed first!
+# sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+# sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+
+HISTSIZE=50000
+SAVEHIST=50000
+HISTFILE=~/.zsh_history
+# Remove superfluous blanks from each command line being added to the history list
+setopt histreduceblanks
+# Remove command lines from the history list when the first character on the
+# line is a space, or when one of the expanded aliases contains a leading space
+setopt histignorespace
+# Do not enter command lines into the history list if they are duplicates of the previous event.
+setopt histignorealldups
+# Switching directories for lazy people
+setopt autocd
+
+# !!! ZPLUG PLUGINS ARE INSTALLED AT ~/.local/share/zplug
+# sane zplug installation defaults
+ZPLUG_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/zplug"
+ZPLUG_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zplug"
+
+# Ensure zplug is installed
+if [ ! -d "$ZPLUG_HOME" ]; then
+    git clone https://github.com/zplug/zplug "$ZPLUG_HOME"
+    source "$ZPLUG_HOME/init.zsh" && zplug --self-manage update
+else
+    source "$ZPLUG_HOME/init.zsh"
+fi
+
+# manage zplug itself like other package
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+
+# POWERLEVEL10k
+# zplug 'romkatv/powerlevel10k', as:theme, depth:1
+
+######################## AUTOCOMPLETIONS and SUGGESTIONS ########################
+zplug "zsh-users/zsh-autosuggestions"
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
+zplug 'zsh-users/zsh-history-substring-search', defer:3 # (like fish)
+zplug 'zsh-users/zsh-completions', depth:1              # more completions
+zplug "ascii-soup/zsh-url-highlighter"
+
+# https://github.com/marlonrichert/zsh-autocomplete
+# zplug "marlonrichert/zsh-autocomplete"
+# zplug "hlissner/zsh-autopair"
+######################## AUTOCOMPLETIONS and SUGGESTIONS ########################
+
+################################# ZSH DIALS #####################################
+zplug "plugins/git", from:oh-my-zsh
+zplug "plugins/pip", from:oh-my-zsh
+zplug "plugins/npm", from:oh-my-zsh
+zplug "plugins/docker", from:oh-my-zsh
+################################# ZSH DIALS #####################################
+
+########################## ENHANCED LINUX UTILITIES ##############################
+### NAVIGATION ###
+# Better ls alternative, use command 'k', however don't alias 'ls' to 'l' as they don't maintain compatibility
+zplug "supercrabtree/k"
+
+# LS_COLORS configuration: https://github.com/trapd00r/LS_COLORS
+# !!! TODO: Might be creating weird output for systems unable to use those color codes
+zplug "trapd00r/LS_COLORS"
+
+# !!! TODO: Create good auto-ls configuration
+#zplug "desyncr/auto-ls"
+#AUTO_LS_COMMANDS=(ls)
+
+zplug "Peltoche/lsd", as:command, from:gh-r, rename-to:lsd
+
+# Better cat replacement
+# zplug "sharkdp/bat", as:command, from:gh-r, rename-to:bat
+
+# Colorized cat alternative, as command 'ccat'
+zplug "owenthereal/ccat", as:command, from:gh-r, rename-to:ccat
+
+# Fuzzy search cd, replaces command 'cd'
+zplug "b4b4r07/enhancd", use:init.sh
+
+# Backwards cd, ad command 'bd'
+zplug "Tarrasch/zsh-bd"
+
+# Mac-like finder
+zplug "b4b4r07/cli-finder", as:command, use:"bin/finder"
+### NAVIGATION ###
+
+### NETWORK ###
+# Colorized ping
+zplug "denilsonsa/prettyping", as:command, use:"prettyping"
+
+# httpstat
+zplug "b4b4r07/httpstat", as:command, use:'(*).sh', rename-to:'$1'
+### NETWORK ###
+
+### OTHER ###
+
+zplug "plugins/colored-man-pages", from:oh-my-zsh
+# Extracts virtually any archive format, use command extract <archive_file>
+zplug "plugins/extract", from:oh-my-zsh
+# Commandline web browser
+zplug "plugins/web-search", from:oh-my-zsh
+### OTHER ###
+########################## ENHANCED LINUX UTILITIES ##############################
+
+# !!! Neeeds to be installed and configured upon enabling. Tracks WakaTime w/ project detection
+# zplug "sobolevn/wakatime-zsh-plugin"
+
+# !!!: Notifies of long running background tasks, needs graphical environment!
+# zplug "plugins/bgnotify", from:oh-my-zsh
+
+# !!! TODO: These don't work through zplug, need to install package 'fasd' manually
+# zplug "plugins/fasd", from:oh-my-zsh
+# zplug "wookayin/fzf-fasd"
+
+# fd is a program to find entries in your filesytem. It is a simple, fast and user-friendly alternative to find
+# EXAMPLES:
+# fd           - list all files recursively
+# fd -e md     - search for file extension
+# fd -H file   - include hidden files and directories
+# fd '^x.*rc$' - RegEx search
+#zplug "sharkdp/fd", as:command, from:gh-r, rename-to:fd
+
+# jq is a lightweight and flexible command-line JSON processor
+zplug "stedolan/jq", as:command
+# ZSH-z is a command line tool that allows you to jump quickly to directories that you have visited frequently
+# zplug "plugins/z", from:oh-my-zsh
+
+# Using local bin folder instalation instead of this
+zplug "junegunn/fzf", as:command, hook-build:"./install --bin", use:"bin/{fzf-tmux,fzf}"
+
+zplug "Aloxaf/fzf-tab"
+
+################# COMMANDLINE USAGE HELPERS
+# Quick usage info for command
+zplug "raylee/tldr", as:command, use:"tldr", rename-to:h
+# !!! TODO: this needs to be installed first. Profides quick fix last incorrect command, just type 'fuck' for correction
+zplug "plugins/thefuck", from:oh-my-zsh
+################# COMMANDLINE USAGE HELPERS
+
+################# GIT HELPERS
+# Better git wrapper
+zplug "github/hub", as:command, from:gh-r, rename-to:hub
+# Git conflict
+zplug "b4b4r07/git-conflict", as:command, use:"git-conflict"
+################# GIT HELPERS
+
+################# ENVIRONMENT HELPERS
+# Virtualenv Autoswitch: Checks for the existence of a Python Virtualenv in the current and parent directories and sources it
+zplug "MichaelAquilina/zsh-autoswitch-virtualenv"
+
+################# ENVIRONMENT HELPERS
+
+################# EMOJI
+zplug "b4b4r07/emoji-cli", on:"stedolan/jq"
+zplug "mrowa44/emojify", as:command
+################# EMOJI
+
+# NMS - cool hacker effect. Example: ls -l | nms
+zplug "bartobri/no-more-secrets", as:command, rename-to:nms
+
+# up - interactively explore textual data
+# zplug "akavel/up", as:command, from:gh-r, rename-to:up
+
+# Direnv - checks for the existence of a .envrc file in the current and parent directories and sources it. update_zsh_direnv to update
+#zplug "ptavares/zsh-direnv" # does not seem to support mac w/ m1 chip
+eval "$(direnv hook zsh)"
+
+############################# INSTALL ZPLUG PLUGINS ##############################
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo
+        zplug install
+    fi
+fi
+
+# Then, source plugins and add commands to $PATH
+zplug load
+############################# INSTALL ZPLUG PLUGINS ##############################
+
+# !!! TODO: Make this work and install through zplug
+# eval "$(fasd --init auto)"
+  
+function gi() { curl -fLw '\n' https://www.gitignore.io/api/"${(j:,:)@}" }
+
+_gitignoreio_get_command_list() {
+  curl -sfL https://www.gitignore.io/api/list | tr "," "\n"
+}
+
+_gitignoreio () {
+  compset -P '*,'
+  compadd -S '' `_gitignoreio_get_command_list`
+}
+
+compdef _gitignoreio gi
+############################# PLUGIN CONFIGURATIONS ##############################
+if zplug check "b4b4r07/enhancd"; then
+    # Disable backwards filter cd for command
+    export ENHANCD_DISABLE_DOT=1
+    export ENHANCD_FILTER=fzf
+fi
+
+if zplug check "junegunn/fzf"; then
+    # Use @ then press tab to trigger fuzzy completion!
+    export FZF_COMPLETION_TRIGGER='@'
+    # If fd plugin installed, use it by default for fuzzy completion since it's faster
+	 export FZF_DEFAULT_COMMAND="fdfind --type file --hidden --no-ignore"
+    # Default fzf options
+    export FZF_DEFAULT_OPTS='--height 50% --ansi --layout=reverse --info=inline'
+    
+    # fe [FUZZY PATTERN] - Open the selected file with the default editor
+    #   - Bypass fuzzy finder if there's only one match (--select-1)
+    #   - Exit if there's no match (--exit-0)
+    # fvim() {
+    #     IFS=$'\n' files=($(fzf --query="$1" --multi --select-1 --exit-0))
+    #     [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
+    # }
+    
+    # Modified version where you can press
+    #   - CTRL-O to open with `open` command,
+    #   - CTRL-E or Enter key to open with the $EDITOR
+    # fopen() {
+    #     IFS=$'\n' out=("$(fzf --query="$1" --exit-0 --expect=ctrl-o,ctrl-e)")
+    #     key=$(head -1 <<<"$out")
+    #     file=$(head -2 <<<"$out" | tail -1)
+    #     if [ -n "$file" ]; then
+    #         [ "$key" = ctrl-o ] && open "$file" || ${EDITOR:-vim} "$file"
+    #     fi
+    # }
+    
+    # fuzzy grep open via ag with line number
+    # function fvimgrep() {
+    #     local file
+    #     local line
+    
+    #     read -r file line <<< "$(ag --nobreak --noheading $@ | fzf -0 -1 | awk -F: '{print $1, $2}')"
+    
+    #     if [[ -n $file ]]; then
+    #         ${EDITOR:-vim} $file +$line
+    #     fi
+    # }
+fi
+############################# PLUGIN CONFIGURATIONS ##############################
+
+################################### ALIASES ######################################
+# Shell aliases
+alias refresh="clear && source ~/.zshrc"
+alias zshrc="vim ~/.zshrc"
+alias zshplugins='vim ~/.plugins'
+# alias p10k="vim ~/.p10k.zsh"
+
+# SSH Server aliases
+alias moa="ssh hunterp@moa1.eecs.utk.edu -p 6022"
+hydra_func(){
+	if [[ -z $1  ]]; then
+		NUM="11"
+	else 
+		NUM=$1
+	fi
+	domain="hprice7@hydra$NUM.eecs.utk.edu"
+	ssh $domain
+}
+# alias hydra="ssh hprice7@hydra10.eecs.utk.edu"
+alias hydra="hydra_func"
+
+alias accona="ssh hprice7@accona.eecs.utk.edu"
+alias kavir="ssh hprice7@kavir.eecs.utk.edu"
+alias gobi="ssh hprice7@gobi.eecs.utk.edu"
+alias thar="ssh hprice7@thar.eecs.utk.edu"
+alias sahara="ssh hprice7@sahara.eecs.utk.edu"
+alias sinai="ssh hprice7@sinai.eecs.utk.edu"
+
+# APT aliases
+alias update="sudo apt update"
+alias upgrade="sudo apt upgrade --fix-missing"
+alias autoclean="sudo apt autoclean"
+alias autoremove="sudo apt autoremove"
+alias dist-upgrade="sudo apt dist-upgrade"
+
+# GitHub CLI aliases
+alias repos="gh repo list | fzf"
+alias gists="gh gist list | fzf"
+alias issues="gh issue list | fzf"
+
+alias fd='fdfind'
+# GIT aliases (hub can safely wrap git)
+#if zplug check "github/hub"; then
+#    alias git="hub"
+#fi
+alias status="git status"
+
+# !!! If alias 'gd' already exist, so this is not really needed
+# alias dif="git diff"
+alias gfp="git status && git add . && git status && git commit -m 'Quick update/fix' && git push && git status && echo 'Successfully pushed!'"
+
+
+alias pull="git pull"
+alias reset="git reset --hard HEAD && git pull && git status"
+alias clean="git clean -fd && git status"
+
+# !!!: LS Command alternative - needs package 'lsd' to be installed. Disable above ls alias if enabling lsd instead.
+#if zplug check "Peltoche/lsd"; then
+#    alias ls='lsd'
+#fi
+alias l='ls -lFh'   #size,show type,human readable
+alias la='ls -lAFh' #long list,show almost all,show type,human readable
+alias lr='ls -tRFh' #sorted by date,recursive,show type,human readable
+alias lt='ls -ltFh' #long list,sorted by date,show type,human readable
+alias ll='ls -l'    #long list
+alias ldot='ls -ld .*'
+alias lS='ls -1FSsh'
+alias lart='ls -1Fcart'
+alias lrt='ls -1Fcrt'
+
+
+alias nv="nvim"
+
+# !!! CAT command alternative - needs package 'bat' to be installed
+#if zplug check "sharkdp/bat"; then
+#    alias cat='bat'
+#fi
+
+alias cls='clear'
+
+alias sudo='sudo ' # make sudo work with aliases
+# Other utility aliases
+alias getpass='openssl rand -base64 20' # Generate password
+alias ip="echo -n 'External: ' && dig +short myip.opendns.com @resolver1.opendns.com && echo -n 'Internal: ' && hostname -I"
+alias sha='shasum -a 256' # Check shasum
+
+################################### ALIASES ######################################
