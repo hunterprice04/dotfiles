@@ -30,27 +30,30 @@
 " plugged directory -> /home/hp/.local/share/nvim/plugged/
 call plug#begin()
 	
-	Plug 'preservim/nerdtree' " File Tree
+	" GUI
 	Plug 'vim-airline/vim-airline' " Status Bar
+	Plug 'preservim/nerdtree' " File Tree
 	Plug 'vim-airline/vim-airline-themes' " Status Bar Themes
-	Plug 'tpope/vim-surround' " Surrounding ysw)
-	Plug 'tpope/vim-commentary' " For Commenting gcc & gc
 	Plug 'ap/vim-css-color' " CSS Color Preview
 	Plug 'rafi/awesome-vim-colorschemes' " Retro Scheme
 	Plug 'ryanoasis/vim-devicons' " Developer Icons
-	"Plug 'tc50cal/vim-terminal' " Vim Terminal
-	Plug 'mg979/vim-visual-multi', {'branch': 'master'} " CTRL + N for multiple cursors
 	Plug 'preservim/tagbar' " Tagbar for code navigation
+	
+	" AUTO COMPLETE
 	Plug 'neoclide/coc.nvim', {'branch': 'release'} " Auto Completion
 	Plug 'github/copilot.vim' " Copilot because why not
-	Plug 'ellisonleao/glow.nvim' " Markdown Preview
+	
+	" FUZZY SEARCH
 	Plug 'nvim-lua/plenary.nvim' " Required for telescope
 	Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' } " Fuzzy Finder
 	Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 	Plug 'nvim-lua/popup.nvim'
 	Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
-
+	
 	" UTILTIY PLUGINS
+	Plug 'tpope/vim-surround' " Surrounding ysw)
+	Plug 'tpope/vim-commentary' " For Commenting gcc & gc
+	Plug 'mg979/vim-visual-multi', {'branch': 'master'} " CTRL + N for multiple cursors
 	Plug 'jghauser/mkdir.nvim' " Create Directory similar to mkdir -p
 	Plug 'matbme/JABS.nvim' " minimal buffer switcher
 	Plug 'sudormrfbin/cheatsheet.nvim' " cheatsheet for nvim
@@ -60,9 +63,10 @@ call plug#begin()
 	Plug 'cappyzawa/trim.nvim' " trim trailing whitespace
 	Plug 'sindrets/winshift.nvim' " Moving windows around
 
-"	Plug 'sheerun/vim-polyglot'
-
+	" MARKDOWN/LATEX
+	Plug 'ellisonleao/glow.nvim' " Markdown Preview
 	Plug 'lervag/vimtex' " Vim Latex
+	"	Plug 'sheerun/vim-polyglot'
 	if has('nvim')
 		Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 	else
@@ -70,33 +74,40 @@ call plug#begin()
 		Plug 'roxma/nvim-yarp'
 		Plug 'roxma/vim-hug-neovim-rpc'
 	endif
+
 	set encoding=UTF-8
 
 call plug#end()
 
 " ###################################################################
+
 " COPILOT
 imap <silent> <C-j> <Plug>(copilot-next)
 imap <silent> <C-k> <Plug>(copilot-previous)
 
 " ###################################################################
+
 " TAGBAR
 nmap <F8> :TagbarToggle<CR>
 :set completeopt-=preview " For No Previews
 
 " ###################################################################
+
 " COLORSCHEME
 :colorscheme deus
 
 
 " ###################################################################
+
 " TELESCOPE
 " Find files using Telescope command-line sugar.
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+
 " ###################################################################
+
 " NERD TREE
 nnoremap <C-f> :NERDTreeFocus<CR>
 " nnoremap <C-n> :NERDTree<CR>
@@ -127,7 +138,6 @@ endif
 " ###################################################################
 " VimTeX
 
-"
 " This is necessary for VimTeX to load properly. The "indent" is optional.
 " Note that most plugin managers will do this automatically.
 filetype plugin indent on
@@ -166,6 +176,7 @@ call deoplete#custom#var('omni', 'input_patterns', {
 
 " ###################################################################
 " WIN-MOVE
+
 " Start Win-Move mode:
 nnoremap <C-W><C-M> <Cmd>WinShift<CR>
 nnoremap <C-W>m <Cmd>WinShift<CR>
